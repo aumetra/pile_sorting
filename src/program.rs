@@ -37,9 +37,9 @@ pub struct BFS {
     strategy: MoveChoice,
     name: String,
     starting_board: Board,
-    found_boards: HashSet<Board>,
-    next_boards: HashSet<Board>,
-    current_boards: HashSet<Board>,
+    found_boards: HashSet<Board, crate::OwnHasher>,
+    next_boards: HashSet<Board, crate::OwnHasher>,
+    current_boards: HashSet<Board, crate::OwnHasher>,
     step_counter: usize,
     solved_board: Option<Board>,
 }
@@ -49,9 +49,9 @@ impl BFS {
             strategy,
             name: "BFS".to_string(),
             starting_board: board.clone(),
-            next_boards: HashSet::new(),
-            current_boards: HashSet::new(),
-            found_boards: HashSet::new(),
+            next_boards: HashSet::default(),
+            current_boards: HashSet::default(),
+            found_boards: HashSet::default(),
             step_counter: 0,
             solved_board: None,
         };
@@ -176,5 +176,20 @@ mod test {
         let mut bfs = BFS::new(&board, strategy);
         let potential_solution = bfs.solve();
         assert!(bfs.solved_board.unwrap() == Board::new_solved_board(4))
+    }
+
+    proptest::proptest! {
+        #[test]
+        fn break_stuff(seed: [u8; 16]) {
+            crate::SEED.lock().unwrap().replace(seed);
+
+            let pile = vec![1, 5, 2, 3, 4];
+            let nbr_piles = 4;
+            let strategy = MoveChoice::Good;
+            let board = Board::new(&pile, nbr_piles);
+            let mut bfs = BFS::new(&board, strategy);
+            let potential_solution = bfs.solve();
+            assert!(bfs.solved_board.unwrap() == Board::new_solved_board(4));
+        }
     }
 }

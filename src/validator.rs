@@ -6,7 +6,7 @@ use std::collections::hash_set::*;
 pub type Solution = Vec<Move>;
 const VALIDATOR_SHOULD_PRINT: bool = true;
 pub fn get_solution(
-    set: &HashSet<Board>,
+    set: &HashSet<Board, crate::OwnHasher>,
     starting_board: &Board,
     strategy_used: &MoveChoice,
 ) -> Solution {

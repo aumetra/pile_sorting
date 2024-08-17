@@ -6,7 +6,7 @@ use rand::thread_rng;
 
 /// Checks that a given sequence doesn't contain gaps.
 pub fn correct_sequence(input_vector: &[u8]) -> bool {
-    let all_numbers: HashSet<u8> = (1..input_vector.len() + 1)
+    let all_numbers: HashSet<u8, crate::OwnHasher> = (1..input_vector.len() + 1)
         .map(|number| u8::try_from(number).unwrap())
         .collect();
     all_numbers

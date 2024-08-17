@@ -433,7 +433,7 @@ pub mod tests {
     }
     #[test]
     fn hash_set_test() {
-        let mut hash_set: HashSet<Board> = HashSet::new();
+        let mut hash_set: HashSet<Board, crate::OwnHasher> = HashSet::default();
 
         let mut board1 = Board::new(&[1, 2, 3, 4], 4);
         let mut board2 = Board::new(&[1, 2, 4, 3], 4);
@@ -450,7 +450,7 @@ pub mod tests {
         insert_new_key_to_hash_set(&mut hash_set, &board1);
         assert!(hash_set.contains(&board2));
     }
-    fn insert_new_key_to_hash_set<K>(set: &mut HashSet<K>, key: &K)
+    fn insert_new_key_to_hash_set<K>(set: &mut HashSet<K, crate::OwnHasher>, key: &K)
     where
         K: std::cmp::Eq + Clone,
         K: std::hash::Hash,
@@ -496,7 +496,7 @@ pub mod tests {
         for pile in vector_util::all_sequences(5) {
             all_board.push(Board::new(&pile, 4));
         }
-        let mut set: HashSet<Board> = HashSet::new();
+        let mut set: HashSet<Board, crate::OwnHasher> = HashSet::default();
         for board in &all_board {
             assert!(!set.contains(&board));
             set.insert(board.clone());
